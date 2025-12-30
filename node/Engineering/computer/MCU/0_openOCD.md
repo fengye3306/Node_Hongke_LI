@@ -8,11 +8,9 @@ OpenOCD将其整合，使得统一接口支持多种调试器，灵活易用
 (GDB/IDE)     (软件层)    (ST-LINK等)    (STM32等)
 ```
 
-## 启动OpenOCD
+## OpenOCD启动指令
 
-启动的核心目的是在调试器和目标芯片之间建立桥梁，提供三大调试服务（GDB、Telnet、TCL）, 三大服务细节后面会讲到。   
-
-> 具体目标
+启动的核心目的是在调试器和目标芯片之间建立桥梁，提供三大调试服务（GDB、Telnet、TCL）, 三大服务细节后面会讲到。 
 
 1. 初始化调试器（ST-LINK/CMSIS-DAP等）
 2. 连接目标芯片（STM32/GD32等）
@@ -20,77 +18,37 @@ OpenOCD将其整合，使得统一接口支持多种调试器，灵活易用
 4. 准备调试环境（复位芯片、设置断点等）
 
 
-> 启动指令
-
-
 OpenOCD 指令 格式如`openocd -f <目标调试器配置> -f <目标芯片配置>  -c [选项]"`，由三个部分组成。  
 其中例如，两个 `-f` 形参是固定输入,`-c` 选项形参是可以无限堆叠的选填
+
+
+**最直观简洁的启动和目标类型芯片的链接，由环境中自动检索的目标调试器。指令启动三大调试服务**   
+调试器类型与目标芯片支持均由开源社区更新维护，需要填写什么参数询问AI即可。  
 
 ```shell
 # eg
 openocd -f interface/stlink.cfg ^
         -f target/stm32f4x.cfg  ^
-        -c  "program firmware.elf" -c "verify" -c "reset" -c "exit"
+        -c "program firmware.elf erase verify reset"
 ```
-调试器和芯片的填写问AI即可，这里主要记录几个`-C`形参：
 
 
-* **program —— 烧录程序**  
+### program（烧录程序）
 
-`program <file> [address] [erase] [verify] [reset]`  
+命令行语法 `program <file> [address] [erase] [verify] [reset]`  
 
 | 参数    | 说明                          |
 |---------|-------------------------------|
-| file    | ELF / BIN / HEX               |
-| address | BIN 必须，ELF 不需要          |
-| erase   | 擦除涉及的 Flash 扇区         |
-| verify  | 写后校验                      |
-| reset   | 烧录完成后复位                |
-
-
+| file    | ELF / BIN / HEX                 |
+| address | 指定基地址，BIN 必须，ELF 不需要  |
+| verify  | 写后校验                         |
+| reset   | 烧录完成后复位                   |
 
 ```shell
+# eg
 -c "program firmware.elf erase verify reset"
 -c "program firmware.bin 0x08000000 erase verify reset"
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-> 启动指令实例
-
-**最直观简洁的启动和目标类型芯片的链接，由环境中自动检索的目标调试器。指令启动三大调试服务**   
-调试器类型与目标芯片支持均由开源社区更新维护
-```shell
-# openocd -f <接口配置> -f <目标配置>
-openocd -f interface/stlink.cfg -f target/stm32f4x.cfg  
-openocd -f interface/cmsis-dap.cfg -f target/stm32f3x.cfg
-``` 
-
-**打开固定端口的调试器**  
-调试器的SN编码需要用特定工具预先进行查询
-```shell
-# "-c adapter serial {SN}"
-openocd -f interface/stlink.cfg  -f target/stm32f4x.cfg ^
-        -c "adapter serial 37FF71064E573436D7C21943" ^
-
-```
-
-
-
-**烧录**   
-
-*目标文件特性*
 
 * ELF（Executable and Linkable Format） 文件，名为结构化可执行文件，文件特点在于**附带调试信息**，故而文件较大。  
 文件本身可读，需要特殊工具解析，适用于调试环境。    
@@ -99,9 +57,7 @@ ELF 文件内部包含段地址（LMA / VMA），OpenOCD 在program xxx.elf 时�
 * BIN（Binary File） 文件，名为纯二进制镜像文件，是**纯机器码文件**，故而**最小**。  
 文件本身纯二进制，不可读，用于生产环境。其中，地址信息需要指定。    
 
-
 *地址问题以STM32F407为例*   
-
 0x00000000 - 0x07FFFFFF: 启动映射区（Alias）,0x00000000 并非真正的物理存储,启动时会根据 BOOT配置 映射到Flash 或者 SRAM ，或者System Memory
 0x08000000 - 0x0807FFFF: Flash (512KB) 应用程序代码只应烧录到主Flash区  
 0x20000000 - 0x2001FFFF: SRAM (128KB)   
@@ -110,35 +66,6 @@ ELF 文件内部包含段地址（LMA / VMA），OpenOCD 在program xxx.elf 时�
 所以对于STM32F407 系列单片机，其基地址为`0x08000000`,如果乱设定起始地址 烧录失败或程序跑飞崩溃。 面对不同的芯片型号查询即可。 
 
 
-```shell
-# openocd -f <接口配置> -f <目标配置> -c "program <文件> [地址] [选项]"
-
-# program    - 编程命令,支持相对和绝对路径
-# erase      - 强制擦除目标 Flash 扇区,这点在烧录bin文件时尤其重要
-# verify     - 编程后验证
-# reset      - 复位芯片（开始运行程序）
-# exit       - 退出 OpenOCD（返回命令行）
-
-# 细节1：烧录 BIN 文件时需要指定烧录的基地址（Base Address）或目标地址（Target Address）。
-# 指令对比如下
-openocd -f  interface/stlink.cfg  -f  target/stm32f4x.cfg  -c  "program firmware.elf verify reset exit" 
-openocd -f  interface/stlink.cfg  -f  target/stm32f4x.cfg  -c  "program D:\\test\\firmware.bin 0x08000000 verify reset exit"
-
-# 细节2：  [选项] 可以不加 
-openocd -f  interface/stlink.cfg  -f  target/stm32f4x.cfg  -c  "program firmware.elf"
-
-# 细节3: 烧录BIN文件时，必须开启选项erase，使得擦除目标 Flash 扇区
-
-```
-
-
-
-
-
-## OpneOCD指令  
-
-
-* 列出当前 OpenOCD 构建版本中支持的 adapter（适配器） 驱动： `openocd -c "adapter list"`   
 
 
 
