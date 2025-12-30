@@ -66,6 +66,18 @@ ELF 文件内部包含段地址（LMA / VMA），OpenOCD 在program xxx.elf 时�
 所以对于STM32F407 系列单片机，其基地址为`0x08000000`,如果乱设定起始地址 烧录失败或程序跑飞崩溃。 面对不同的芯片型号查询即可。 
 
 
+### adapter serial指定端口 
+
+通过指定 具体的sn码 确认启动的目标调试器
+
+```shell
+openocd ^
+  -f interface/stlink.cfg ^
+  -f target/stm32f4x.cfg ^
+  -c "adapter serial 37FF71064E573436D7C21943" 
+```
+
+
 
 
 
