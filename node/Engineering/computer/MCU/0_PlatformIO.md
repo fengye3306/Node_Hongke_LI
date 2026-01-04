@@ -1,7 +1,7 @@
 PlatformIO是一个跨平台的IDE解决方案。  
 
 
-## pio指令
+## pio控制台指令
 
 *栏记录pio控制台指令以方便查阅*
 
@@ -9,18 +9,9 @@ PlatformIO是一个跨平台的IDE解决方案。
 `pio device list` 
 
 
+## platformio.ini 
 
-## PlatformIO配置文件记录
-*栏记录PlatformIO配置文件键值对方便查阅*
-
-* 上如何与你的开发板/芯片进行通信，以完成固件上传（烧录）的过程   
-`upload_protocol`  
-
-```ini
-upload_protocol = cmsis-dap
-# cmsis-dap 
-
-```
+> 自动下载第三方库并处理依赖
 
 
 
