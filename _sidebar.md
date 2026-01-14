@@ -1,5 +1,5 @@
 
-* [工学](./node/Engineering/ "工学")
-* [阅读](./node/Read/ "阅读")
+* [工学](./node/engineering/ "工学")
+* [阅读](./node/read/ "阅读")
 
 

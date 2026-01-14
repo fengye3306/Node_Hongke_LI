@@ -11,7 +11,6 @@ PlatformIO是一个跨平台的IDE解决方案。
 
 ## platformio.ini 
 
-> 自动下载第三方库并处理依赖
 
 
 
