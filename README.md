@@ -1,12 +1,7 @@
 # 李泓科的博客
 
-## 笔记地址
 
-```Link
-https://fengye3306.github.io/Node_FengYe/#/
-```
-
-## 部署个人笔记
+## 个人笔记部署教程
 
 ```link
 // Docsify官方文档

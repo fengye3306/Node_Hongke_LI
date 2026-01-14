@@ -1,4 +1,4 @@
 * [返回](../README.md)
 
-* [PlatformIO](./PlatformIO.md)
+* [PlatformIO](./platformIO.md)
 * [openOCD](./openOCD.md)
