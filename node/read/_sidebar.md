@@ -7,5 +7,5 @@
 
 
 **单本**
-* [雷赛轴卡手册](./0_motionCardSMC606.md)
+* [雷赛轴卡手册](./motionCardSMC606.md)
 
