@@ -8,5 +8,5 @@
 
 **工具**
 * [git](./git.md)
-* [plc语言](./plcLanduage.md)
+* [IEC 61131-3](./iec61131.md)
 

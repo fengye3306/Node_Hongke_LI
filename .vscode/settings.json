@@ -84,8 +84,8 @@
     "utf8": "disable"
   },
   "Lua.workspace.library": [
-    "/home/hongkeli/.vscode/extensions/tektronix.tsp-toolkit-1.4.0-linux-x64/node_modules/@tektronix/keithley_instrument_libraries/keithley_instrument_libraries/tsp-lua-5.0",
-    "/home/hongkeli/.vscode/extensions/tektronix.tsp-toolkit-1.4.0-linux-x64/node_modules/@tektronix/keithley_instrument_libraries/keithley_instrument_libraries/nodes_definitions"
+    "c:\\Users\\lihon\\.vscode\\extensions\\tektronix.tsp-toolkit-1.4.0-win32-x64\\node_modules\\@tektronix\\keithley_instrument_libraries\\keithley_instrument_libraries\\tsp-lua-5.0",
+    "c:\\Users\\lihon\\.vscode\\extensions\\tektronix.tsp-toolkit-1.4.0-win32-x64\\node_modules\\@tektronix\\keithley_instrument_libraries\\keithley_instrument_libraries\\nodes_definitions"
   ],
   "Lua.workspace.preloadFileSize": 2000
 }
