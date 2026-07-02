@@ -82,18 +82,14 @@
         depth: 4,
       },
       latex: {
-        inlineMath   : [['$', '$'], ['@', '@']],
-        displayMath  : [['$$', '$$'], ['@@', '@@']],
+        inlineMath   : [['$', '$'], ['\\(', '\\)']],
+        displayMath  : [['$$', '$$'], ['\\[', '\\]']],
         customOptions: {
-          // For MathJax version 3
           tex: {
-            tags: 'ams'
-          },
-          // For MathJax version 2
-          TeX: {
-            equationNumbers: {
-              autoNumber: "AMS"
-            }
+            inlineMath    : [['$', '$'], ['\\(', '\\)']],
+            displayMath   : [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            tags          : 'ams'
           }
         }
       }
